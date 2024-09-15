@@ -551,6 +551,17 @@ MCP2515::ERROR MCP2515::setClkOut(const CAN_CLKOUT divisor)
     return ERROR_OK;
 }
 
+MCP2515::ERROR MCP2515::setSleepWakeup(const bool enable)
+{
+    ERROR res = setConfigMode();
+    if (res != ERROR_OK) {
+        return res;
+    }
+
+	modifyRegister(MCP_CANINTE, 0b01000000, enable * 0xFF);
+    return ERROR_OK;
+}
+
 void MCP2515::prepareId(uint8_t *buffer, const bool ext, const uint32_t id)
 {
     uint16_t canid = (uint16_t)(id & 0x0FFFF);
